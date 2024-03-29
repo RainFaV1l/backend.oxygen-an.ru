@@ -12,4 +12,12 @@ class PopularProducts extends Model
         'product_id',
         'popular_product_id',
     ];
+
+    public function product() {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    public function popularProduct() {
+        return $this->belongsTo(Product::class, 'popular_product_id', 'id');
+    }
 }

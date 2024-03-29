@@ -21,9 +21,33 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/products', [\App\Http\Controllers\Api\V1\IndexController::class, 'products'])->name('products');
 //Route::get('/products/{product}', [\App\Http\Controllers\Api\V1\IndexController::class, 'product'])->name('product');
 
-Route::controller(\App\Http\Controllers\Api\V1\IndexController::class)->group(function () {
+Route::controller(\App\Http\Controllers\Api\V1\IndexController::class)->middleware('api')->group(function () {
     Route::get('/products', 'products')->name('products');
+    Route::get('/products/{product}/see/also', 'popularProducts')->name('popularProducts');
     Route::get('/products/{product}', 'product')->name('product');
     Route::get('/categories', 'categories')->name('categories');
     Route::get('/categories/{category}', 'category')->name('category');
+    Route::post('/subscribe', 'subscribe')->name('subscribe');
+});
+
+Route::controller(\App\Http\Controllers\Api\V1\AuthController::class)->middleware('api')->prefix('auth')->group(function () {
+    Route::post('/login', 'login');
+    Route::post('/user', 'user');
+    Route::post('/logout', 'logout');
+    Route::post('/refresh', 'refresh');
+});
+
+Route::controller(\App\Http\Controllers\Api\V1\OrderController::class)->middleware('api')->group(function () {
+    Route::post('guest/checkout', 'guestCheckout');
+    Route::post('auth/checkout', 'authCheckout');
+    Route::get('orders', 'orders');
+});
+
+Route::controller(\App\Http\Controllers\Api\V1\CartController::class)->middleware('api')->prefix('cart')->group(function () {
+    Route::get('/products', 'getCartProducts');
+    Route::post('{id}/status/cancelling', 'cancelling');
+    Route::patch('/update', 'updateCart');
+    Route::post('/products', 'addToCart');
+    Route::delete('/products/{id}', 'deleteToCart');
+    Route::delete('/clear', 'clearCart');
 });

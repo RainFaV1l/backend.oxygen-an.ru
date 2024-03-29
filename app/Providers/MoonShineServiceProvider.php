@@ -4,20 +4,28 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Cart;
+use App\Models\CartStatus;
 use App\Models\Color;
+use App\Models\Order;
 use App\Models\PopularProducts;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductImages;
 use App\Models\ProductType;
+use App\Models\Subscribe;
 use App\Models\User;
 use App\Models\UserRole;
+use App\MoonShine\Resources\CartResource;
+use App\MoonShine\Resources\CartStatusResource;
 use App\MoonShine\Resources\ColorResource;
+use App\MoonShine\Resources\OrderResource;
 use App\MoonShine\Resources\PopularProductResource;
 use App\MoonShine\Resources\ProductCategoryResource;
 use App\MoonShine\Resources\ProductImageResource;
 use App\MoonShine\Resources\ProductResource;
 use App\MoonShine\Resources\ProductTypeResource;
+use App\MoonShine\Resources\SubscribeResource;
 use App\MoonShine\Resources\UserResource;
 use App\MoonShine\Resources\UserRoleResource;
 use MoonShine\Models\MoonshineUser;
@@ -65,9 +73,12 @@ class MoonShineServiceProvider extends MoonShineApplicationServiceProvider
             MenuGroup::make('Пользователи', [
                 MenuItem::make('Пользователь', new UserResource())->icon('heroicons.outline.user')->badge(fn() => User::query()->count()),
                 MenuItem::make('Роль', new UserRoleResource())->icon('heroicons.outline.adjustments-vertical')->badge(fn() => UserRole::query()->count()),
+                MenuItem::make('Рассылка', new SubscribeResource())->icon('heroicons.outline.chat-bubble-oval-left-ellipsis')->badge(fn() => Subscribe::query()->count()),
             ]),
             MenuGroup::make('Заказы', [
-
+                MenuItem::make('Статус корзины', new CartStatusResource())->icon('heroicons.outline.chart-bar')->badge(fn() => CartStatus::query()->count()),
+                MenuItem::make('Корзина', new CartResource())->icon('heroicons.outline.shopping-bag')->badge(fn() => Cart::query()->count()),
+                MenuItem::make('Заказ', new OrderResource())->icon('heroicons.outline.gift')->badge(fn() => Order::query()->count()),
             ]),
         ];
     }

@@ -18,6 +18,7 @@ class Product extends Model
         'preview_image_path',
         'size_image_path',
         'color_id',
+        'type_id',
     ];
 
     protected $hidden = [
@@ -47,6 +48,42 @@ class Product extends Model
     public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(ProductImages::class, 'product_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function popularProducts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PopularProducts::class, 'product_id', 'id');
+    }
+
+
+    /**
+     * @return BelongsTo
+     */
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(ProductType::class, 'type_id', 'id');
+    }
+
+
+    /**
+     * @return BelongsTo
+     */
+    public function order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, 'product_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function carts(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+
+        return $this->belongsToMany(Cart::class, 'orders', 'product_id', 'cart_id');
+
     }
 
 }

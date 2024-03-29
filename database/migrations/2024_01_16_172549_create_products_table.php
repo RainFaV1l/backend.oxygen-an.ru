@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unsignedFloat('price')->default(0);
             $table->string('preview_image_path');
             $table->string('size_image_path');
-            $table->foreignId('color_id')->nullable()->constrained('colors')->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained('product_categories');
+            $table->foreignId('color_id')->nullable()->constrained('colors')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('category_id')->constrained('product_categories')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });
     }
